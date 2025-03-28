@@ -106,7 +106,7 @@ main {
 }
 
 #heart_icon:hover img {
-  content: url('/img/heart2.png');
+  content: url('../../img/heart2.png');
   transform: scale(1.1);
 }
 
