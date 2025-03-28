@@ -1,0 +1,197 @@
+body {
+  margin: 0;
+  font-family: "Roboto", "sans-serif";
+  font-weight: 400;
+  background-color: #ffffff;
+  font-style: normal;
+}
+
+header {
+  background-color: #8BD7D2;
+  display: flex;
+  margin: 10px 10px 0 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px 1px 0;
+  border-radius: 30px 30px 0 0;
+}
+
+header h1 {
+  margin: 0;
+  font-family: "Brush Script MT", serif;
+}
+
+header ul {
+  list-style: none;
+  display: flex;
+  gap: 50px;
+  margin: 0;
+  padding-right: 100px;
+}
+
+header li {
+  font-size: 30px;
+  justify-content: center;
+}
+
+main {
+  padding: 20px;
+  margin: 0 10px 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid black;
+}
+
+/* Main  left  side css */
+
+.left_section {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.search_bar {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search_bar form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+
+}
+
+.search_bar input {
+  padding: 10px;
+  width: 80%;
+  border: 1px solid #b5b5b5;
+  border-radius: 5px;
+}
+
+.search_bar button {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #b5b5b5;
+}
+
+.search_bar button:hover {
+  background-color: #5bb0a8;
+  transform: scale(1.1);
+  color: white;
+}
+
+#heart_icon {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#heart_icon img {
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+#heart_icon:hover img {
+  content: url('/images/heart2.png');
+  transform: scale(1.1);
+}
+
+.left_section ul {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.left_section ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.left_section ul button {
+  background-color: #ffffff;
+  border: 2px solid #8BD7D2;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.left_section ul button:hover {
+  background-color: #5bb0a8;
+  transform: scale(1.1);
+  color: white;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.tables {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 20px;
+}
+
+.tables table {
+  width: 90%;
+  border-collapse: collapse;
+
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #000;
+  text-align: left;
+}
+
+
+th, td {
+  padding: 10px;
+  border: 1px solid #cacaca;
+  text-align: left;
+}
+
+
+/* Main right side css */
+
+.right_section {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.map img {
+  max-width: 100%;
+  height: auto;
+  flex-shrink: 0;
+}
