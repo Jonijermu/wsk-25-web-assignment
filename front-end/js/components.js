@@ -74,5 +74,5 @@ const restaurantMenu = (menu)  => {
 
 }
 
-export {restaurantBox, restaurantMenu, loginScreen, signUpScreen, userMenuScreen, createHeaders};
+export {restaurantBox, restaurantMenu, loginScreen, signUpScreen, userMenuScreen};
 
