@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="css/style.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script type="module" src="./js/main.js" defer></script>
+  <title>Title</title>
+</head>
+<body>
+<header>
+  <h1><strong>Student</strong> Lunches</h1>
+  <ul class="headers-ul">
+    <li id="loginBtn">Login</li>
+    <li id="registerBtn">Register</li>
+  </ul>
+  <dialog id="loginModal"></dialog>
+  <dialog id="signUpModal"></dialog>
+  <dialog id="userMenuModal"></dialog>
+</header>
+<main>
+  <div class="left_section">
+    <div class="search_bar">
+      <form>
+        <label>
+          <input placeholder="Search for restaurant" type="text">
+        </label>
+        <button type="Submit" id="search-button">Search</button>
+        <button type="Submit" id="locate-button">Locate</button>
+      </form>
+    </div>
+    <ul class="day-buttons">
+      <li>
+        <button data-day="monday">Mon</button>
+      </li>
+      <li>
+        <button data-day="tuesday">Tue</button>
+      </li>
+      <li>
+        <button data-day="wednesday">Wed</button>
+      </li>
+      <li>
+        <button data-day="thursday">Thu</button>
+      </li>
+      <li>
+        <button data-day="friday">Fri</button>
+      </li>
+      <li>
+        <button data-day="saturday">Sat</button>
+      </li>
+      <li>
+        <button data-day="sunday">Sun</button>
+      </li>
+    </ul>
+    <h2>Restaurants</h2>
+    <div id="notification" class="notification hidden"></div>
+    <div class="restaurant-container">
+
+    </div>
+  </div>
+  <div class="right_section">
+    <div id="map">
+
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

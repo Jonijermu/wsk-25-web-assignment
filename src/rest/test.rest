@@ -1,0 +1,9 @@
+POST http://127.0.0.1:3001/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Joni",
+  "username": "Joni",
+  "password": "joni1234",
+  "email": "joni@prööt.fi"
+}
