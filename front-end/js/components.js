@@ -74,5 +74,33 @@ const restaurantMenu = (menu)  => {
 
 }
 
-export {restaurantBox, restaurantMenu, loginScreen, signUpScreen, userMenuScreen};
+const menuTable = (menu) => {
+  const { courses } = menu;
+  let menuHtml = '';
+
+  courses.forEach(course => {
+    menuHtml += `
+      <tr>
+        <td>${course.name}</td>
+        <td>${course.price || '-'}</td>
+        <td>${course.diets || '-'}</td>
+      </tr>
+    `;
+  });
+
+  return `
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Diets</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${menuHtml}
+    </tbody>
+  `;
+}
+
+export {restaurantBox, restaurantMenu, loginScreen, signUpScreen, userMenuScreen,  menuTable};
 

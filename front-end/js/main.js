@@ -9,14 +9,19 @@ import {
 } from "./utils.js";
 
 import {
-  loginScreen,
+  loginScreen, menuTable,
   restaurantBox,
   restaurantMenu,
   signUpScreen,
   userMenuScreen
 } from "./components.js";
 
-import {getRestaurantsLatLon} from "./map.js"
+import {
+  createMap,
+  favoriteMarker,
+  getRestaurantsLatLon,
+  zoomRestaurant
+} from "./map.js"
 import {baseUrl, restaurantUrl,} from "./variables.js";
 
 let restaurants = [];
@@ -30,6 +35,7 @@ const div = document.querySelector('.restaurant-container')
 const loginModal = document.querySelector('dialog');
 const signUpModal = document.querySelector('dialog');
 const userMenuModal = document.querySelector('dialog');
+const menuDisplay = document.querySelector('.menu-display')
 
 //Getters for restaurant API's
 const getRestaurants = async () => {
@@ -51,7 +57,6 @@ const getDailyMenu = async (id, lang) => {
 const getWeeklyMenu = async (id, lang) => {
   try {
     weeklyMenu = await fetchData(`${restaurantUrl}/restaurants/weekly/${id}/${lang}`)
-    console.log(weeklyMenu)
   } catch (error) {
     console.log(error);
   }
@@ -138,6 +143,38 @@ const getFavoritesByUserId = async () => {
   }
 }
 
+const getUserLocation =  () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(position),
+      (error) => reject(error)
+    );
+  });
+}
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  return Math.sqrt(((lat2 - lat1) ** 2) + ((lon2 - lon1) ** 2));
+}
+
+const findNearestRestaurant = async (restaurants) => {
+  const user = await getUserLocation();
+  console.log(user)
+  let closestRestaurant = null;
+  let minDistance = Infinity;
+  for (let rest of restaurants) {
+    const restLat = rest.location.coordinates[1];
+    const restLon = rest.location.coordinates[0];
+    const distance = calculateDistance(
+      user.coords.latitude, user.coords.longitude, restLat, restLon
+    );
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestRestaurant = rest;
+    }
+  }
+  console.log(closestRestaurant)
+  zoomRestaurant(closestRestaurant);
+};
 
 const signUpPage = () => {
   const registerBtn = document.querySelector('#registerBtn');
@@ -227,6 +264,7 @@ const loginPage = () => {
 
 const createContainerBoxes = async () => {
   div.innerHTML = '';
+  findNearestRestaurant(restaurants);
   for (const restaurant of restaurants) {
     try {
       const box = restaurantBox(restaurant);
@@ -238,8 +276,18 @@ const createContainerBoxes = async () => {
       if (Array.isArray(favorites) && favorites.some(fav => Number(fav.company_id) === restaurant.companyId)) {
         heartBtn.classList.add('favorite');
       }
+      box.addEventListener('click', async function() {
+        try {
+          const menu = await getDailyMenu(restaurant._id, 'en');
+          menuDisplay.innerHTML = menuTable(menu);
+          showWeeklyMenu(restaurant)
+        } catch (error) {
+          console.log(error);
+        }
+      });
       heartBtn.addEventListener('click', async function (e) {
         e.preventDefault();
+        e.stopPropagation();
         if (!currentUser) {
           showNotification(heartBtn, "You need to log in to save favorites!");
           return;
@@ -248,6 +296,7 @@ const createContainerBoxes = async () => {
         const companyId = restaurant.companyId
         if (!heartBtn.classList.contains('favorite')) {
           await saveToFavorites(companyId);
+          favoriteMarker(restaurant)
           heartBtn.classList.add('favorite');
         } else {
           await removeFromFavorites(companyId);
@@ -261,19 +310,23 @@ const createContainerBoxes = async () => {
 };
 
 
-const showWeeklyMenu = () => {
+const showWeeklyMenu = (restaurant) => {
   const dayButtons = document.querySelectorAll('button[data-day]');
   dayButtons.forEach(button => {
-    button.addEventListener('click', async (e) => {
+    const newButton = button.cloneNode(true);
+    button.replaceWith(newButton);
+    newButton.addEventListener('click', async (e) => {
+      e.preventDefault();
       const day = e.target.dataset.day;
-      console.log(day);
-      for (const restaurant of restaurants) {
         try {
-          await getWeeklyMenu(restaurant._id, day);
+          weeklyMenu = [];
+          await getWeeklyMenu(restaurant._id, 'en');
+          const selectedDayMenu = weeklyMenu.days[day];
+          menuDisplay.innerHTML = menuTable(selectedDayMenu);
         } catch (error) {
           console.log(error);
         }
-      }
+
     });
   });
 };
@@ -302,5 +355,6 @@ const init = async () => {
   createContainerBoxes();
   loginPage();
   signUpPage();
+  getUserLocation()
 }
 init();

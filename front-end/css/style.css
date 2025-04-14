@@ -131,53 +131,9 @@ main {
   color: white;
 }
 
-.left_section ul {
-  list-style: none;
-  display: flex;
-  gap: 10px;
-}
-
-.left_section ul li {
-  margin: 0;
-  padding: 0;
-}
-
-.left_section ul button {
-  background-color: #ffffff;
-  border: 2px solid #8BD7D2;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.left_section ul button:hover {
-  background-color: #5bb0a8;
-  transform: scale(1.1);
-  color: white;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.info div {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.info img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
 .restaurant-container {
   width: 100%;
-  height: 825px;
+  height: 600px;
   background-color: #fafafa;
   display: flex;
   flex-direction: row;
@@ -187,6 +143,7 @@ main {
   overflow-x: hidden;
   border-top:1px solid #d3d3d3;
   padding-top: 10px;
+
 }
 
 .restaurant-box {
@@ -217,6 +174,13 @@ main {
   color: #666;
   line-height: 1.5;
   margin: 5px 10px;
+}
+
+.restaurant-box:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .heart-icon {
@@ -268,6 +232,79 @@ main {
 
 #map {
   width: 100%;
-  height: 1050px;
+  height: 800px;
   position: relative;
+}
+
+/*Weekly menu section  */
+
+.menu_section {
+  background-color: #fafafa;
+  margin: 0 10px 10px 10px;
+  border: 1px solid black;
+  border-radius: 0 0 30px 30px;
+  padding: 20px;
+}
+
+.menu_section h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.menu_section .day-buttons {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.menu_section .day-buttons button {
+  background-color: #ffffff;
+  border: 2px solid #8BD7D2;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.menu_section .day-buttons button:hover {
+  background-color: #5bb0a8;
+  transform: scale(1.1);
+  color: white;
+}
+
+.menu-display {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  border-top: 1px solid #d3d3d3;
+}
+
+.menu_section h2 {
+  text-align: center;
+  margin: 16px 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.menu_section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.menu_section thead {
+  background-color: #f7f7f7;
+}
+
+.menu_section thead th {
+  padding: 12px;
+  font-weight: bold;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+.menu_section tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
 }
