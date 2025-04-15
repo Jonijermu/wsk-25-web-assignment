@@ -26,7 +26,12 @@ userRouter.route('/').get(getUser).post(
   createThumbnail,
   postUser);
 
-userRouter.route('/:id').get(getUserById).put(authenticateToken, putUser).delete(authenticateToken, deleteUser);
+userRouter.route('/:id').get(getUserById).delete(authenticateToken, deleteUser).put(
+  body('email').optional().isEmail(),
+  body('username').optional().isLength({ min: 3, max: 20 }).isAlphanumeric(),
+  body('password').optional().isLength({ min: 8 }),
+  validationErrors,
+  authenticateToken, putUser);
 
 
 export default userRouter;

@@ -1,11 +1,15 @@
 const loginScreen = () => {
   let loginHtml = '';
   loginHtml += `
-  <form id="loginForm" class="form-modal">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+   <form id="loginForm" class="form-modal">
+    <div class="form-header">
+      <h3>Login</h3>
+      <button type="button" name="exitBtn" value="close" class="close-btn">Close</button>
+    </div>
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
   `;
   return loginHtml
 }
@@ -14,6 +18,10 @@ const signUpScreen = () => {
   let signUpHtml = '';
   signUpHtml += `
   <form id="signUpForm" class="form-modal">
+  <div class="form-header">
+  <h3>Register</h3>
+  <button type="button" name="exitBtn" value="close" class="close-btn">Close</button>
+  </div>
       <input type="text" name="name" placeholder="Name" required />
       <input type="text" name="username" placeholder="Username" required />
       <input type="email" name="email" placeholder="email" required />
@@ -25,13 +33,17 @@ const signUpScreen = () => {
   return signUpHtml;
 }
 
-const userMenuScreen = () => {
+const userMenuScreen = (currentUser) => {
   let userMenuHtml = '';
   userMenuHtml += `
     <form id="userMenuForm" class="form-modal">
-      <input type="text" name="name" placeholder="Name" />
-      <input type="text" name="username" placeholder="Username"  />
-      <input type="email" name="email" placeholder="email"  />
+    <div class="form-header">
+    <h3>Profile</h3>
+    <button type="button" name="exitBtn" value="close" class="close-btn">Close</button>
+    </div>
+      <input type="text" name="name" value="${currentUser.name}" />
+      <input type="text" name="username" value="${currentUser.username}"  />
+      <input type="email" name="email" value="${currentUser.email}"  />
       <input type="password" name="password" placeholder="Password"  />
       <input type="file" name="file" />
 
@@ -42,7 +54,7 @@ const userMenuScreen = () => {
   return userMenuHtml;
 }
 
-const restaurantBox  = (restaurant) => {
+const restaurantBox = (restaurant) => {
   const {name, company, city, address, phone} = restaurant;
   const div = document.createElement('div');
   div.classList.add('restaurant-box');
@@ -58,7 +70,7 @@ const restaurantBox  = (restaurant) => {
   return div;
 }
 
-const restaurantMenu = (menu)  => {
+const restaurantMenu = (menu) => {
   const {courses} = menu;
   let menuHtml = '';
   courses.forEach(course => {
@@ -75,7 +87,7 @@ const restaurantMenu = (menu)  => {
 }
 
 const menuTable = (menu) => {
-  const { courses } = menu;
+  const {courses} = menu;
   let menuHtml = '';
 
   courses.forEach(course => {
@@ -102,5 +114,12 @@ const menuTable = (menu) => {
   `;
 }
 
-export {restaurantBox, restaurantMenu, loginScreen, signUpScreen, userMenuScreen,  menuTable};
+export {
+  restaurantBox,
+  restaurantMenu,
+  loginScreen,
+  signUpScreen,
+  userMenuScreen,
+  menuTable
+};
 

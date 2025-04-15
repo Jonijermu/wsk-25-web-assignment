@@ -30,7 +30,6 @@ const findUserById = async (id) => {
     username: rows[0].username,
     email: rows[0].email,
     password: rows[0].password,
-    role: rows[0].role,
     companyId: favoriteCompanies
   };
 };
@@ -100,7 +99,13 @@ const login = async (user) => {
   if (rows.length === 0) {
     return false;
   }
-  return rows[0];
+  const userData = rows[0];
+  const profilePictureUrl = `/uploads/${userData.profile_picture}`;
+
+  return {
+    ...userData,
+    profile_picture: profilePictureUrl,
+  };
 };
 
 export {listAllUsers, findUserById, addUser, deleteUserById, modifyUser, login};
