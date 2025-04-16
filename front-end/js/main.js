@@ -117,6 +117,7 @@ const tokenTest = async (token) => {
   }
 }
 
+
 //API calls for the favorites
 const saveToFavorites = async (companyId) => {
   try {
@@ -258,6 +259,8 @@ const userMenuPage = () => {
             userData[key] = value;
           }
         });
+        const fileInput = userMenuForm.querySelector('input[type="file"]');
+        console.log(fileInput)
         if (Object.keys(userData).length > 0) {
           putUser(userData);
         }

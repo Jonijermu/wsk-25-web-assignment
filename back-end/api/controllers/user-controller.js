@@ -25,7 +25,6 @@ const getUserById = async (req, res) => {
 };
 
 const postUser = async (req, res, next) => {
-
   if (!req.file) {
 
     const error = new Error('Invalid or missing file');

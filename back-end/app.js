@@ -14,7 +14,7 @@ app.use('/uploads', express.static( 'uploads'));
 app.use('/public', express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('Thoimiii');
+  res.send('Welcome to my REST api');
 });
 
 app.use('/api/v1', api);
