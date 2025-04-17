@@ -1,6 +1,7 @@
 var map;
 const markers = {}
 
+// Create the map
 const createMap = async () => {
   map = L.map('map').setView([60.186776, 24.822108], 12);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -9,6 +10,7 @@ const createMap = async () => {
   }).addTo(map);
 }
 
+//Gets  data from the restaurants and pass them to the restaurantMarker (saves the markers in  markers object)
 const getRestaurantsLatLon = async (restaurants) => {
   for (let rest of restaurants) {
     const lat = rest.location.coordinates[1];
@@ -20,6 +22,7 @@ const getRestaurantsLatLon = async (restaurants) => {
   }
 }
 
+//Adds the marker to the map
 const restaurantMarker = (lat, lon, name, address, map) => {
   const marker = L.marker([lat, lon]).addTo(map);
   marker.bindPopup(`<h3>${name}</h3>
@@ -27,10 +30,7 @@ const restaurantMarker = (lat, lon, name, address, map) => {
   return marker
 }
 
-const favoriteMarker = (restaurant) => {
-
-}
-
+//Zooming effect and opens up the marker that  gets zoomed  on
 const zoomRestaurant = (rest) => {
   map.flyTo([rest.location.coordinates[1], rest.location.coordinates[0]], 15,
     {animate: true, duration: 1.5, easeLinearity: 0.25});
@@ -41,6 +41,7 @@ const zoomRestaurant = (rest) => {
   }
 }
 
+//marker for the user
 const userMarker = (user) => {
   const marker = L.marker([user.coords.latitude, user.coords.longitude,]).addTo(map);
   marker.bindPopup('cockSucker')
@@ -52,7 +53,6 @@ export {
   createMap,
   restaurantMarker,
   getRestaurantsLatLon,
-  favoriteMarker,
   zoomRestaurant,
   userMarker
 }

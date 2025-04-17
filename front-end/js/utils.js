@@ -10,6 +10,7 @@ const fetchData  = async (url, options = {}) => {
   return json;
 }
 
+
 const getData = async (url, token) => {
   try {
     const options = {
@@ -24,6 +25,7 @@ const getData = async (url, token) => {
     console.error(error);
   }
 }
+
 
 const postData = async (url, data, token) => {
   try {
@@ -72,6 +74,7 @@ const postFormData = async (url, formData) => {
   }
 };
 
+
 const authMe = async (url, token) => {
   const options = {
     method: 'GET',
@@ -97,6 +100,7 @@ const deleteData = async (url, token) => {
     const message = await response.json();
     console.log(message)
 }
+
 
 const putData = async (url, data = {}, token) => {
   const options = {

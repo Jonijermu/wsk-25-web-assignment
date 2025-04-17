@@ -1,4 +1,6 @@
-const loginScreen = () => {
+
+// Creates the login modal elements and return the html
+const createLoginModal = () => {
   let loginHtml = '';
   loginHtml += `
    <form id="loginForm" class="form-modal">
@@ -14,7 +16,8 @@ const loginScreen = () => {
   return loginHtml
 }
 
-const signUpScreen = () => {
+//Creates the register page elements
+const registerScreen = () => {
   let signUpHtml = '';
   signUpHtml += `
   <form id="signUpForm" class="form-modal">
@@ -33,6 +36,7 @@ const signUpScreen = () => {
   return signUpHtml;
 }
 
+//Creates the user profile screen
 const userMenuScreen = (currentUser) => {
   let userMenuHtml = '';
   userMenuHtml += `
@@ -54,7 +58,8 @@ const userMenuScreen = (currentUser) => {
   return userMenuHtml;
 }
 
-const restaurantBox = (restaurant) => {
+//Creates the restaurant boxes
+const createRestaurantBox = (restaurant) => {
   const {name, company, city, address, phone} = restaurant;
   const div = document.createElement('div');
   div.classList.add('restaurant-box');
@@ -70,6 +75,7 @@ const restaurantBox = (restaurant) => {
   return div;
 }
 
+//Creates the restaurant daily menu in the div container boxes
 const restaurantMenu = (menu) => {
   const {courses} = menu;
   let menuHtml = '';
@@ -86,6 +92,7 @@ const restaurantMenu = (menu) => {
 
 }
 
+//Creates menu table for weekly view
 const menuTable = (menu) => {
   const {courses} = menu;
   let menuHtml = '';
@@ -115,10 +122,10 @@ const menuTable = (menu) => {
 }
 
 export {
-  restaurantBox,
+  createRestaurantBox,
   restaurantMenu,
-  loginScreen,
-  signUpScreen,
+  createLoginModal,
+  registerScreen,
   userMenuScreen,
   menuTable
 };

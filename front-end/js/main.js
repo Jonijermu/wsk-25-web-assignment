@@ -9,16 +9,14 @@ import {
 } from "./utils.js";
 
 import {
-  loginScreen, menuTable,
-  restaurantBox,
+  createLoginModal, createRestaurantBox,
+  menuTable, registerScreen,
   restaurantMenu,
-  signUpScreen,
   userMenuScreen
 } from "./components.js";
 
 import {
   createMap,
-  favoriteMarker,
   getRestaurantsLatLon, userMarker,
   zoomRestaurant
 } from "./map.js"
@@ -29,25 +27,31 @@ let favorites = []
 let weeklyMenu = []
 let userToken = null;
 let currentUser = null;
+let box;
 
 let headersUl = document.querySelector('.headers-ul');
 const div = document.querySelector('.restaurant-container')
-const loginModal = document.querySelector('dialog');
-const signUpModal = document.querySelector('dialog');
-const userMenuModal = document.querySelector('dialog');
+const loginModal = document.querySelector('#loginModal');
+const registerModal = document.querySelector('#registerModal');
+const profileModal = document.querySelector('#profileModal');
 const menuDisplay = document.querySelector('.menu-display');
-const searchform = document.querySelector('.search-form');
-let box;
+const searchForm = document.querySelector('.search-form');
+const favButton = document.querySelector('#fav-button');
+const clearButton = document.querySelector('#clear-button')
+
 
 //Getters for restaurant API's
 const getRestaurants = async () => {
   try {
-    restaurants = await fetchData(restaurantUrl + '/restaurants');
+    restaurants = await fetchData(restaurantUrl + '/restaurants')
+    //Creates restaurant container boxes
+    createContainerBoxes(restaurants)
   } catch (error) {
     console.error(error);
   }
 }
 
+//Get daily menu
 const getDailyMenu = async (id, lang) => {
   try {
     return await fetchData(`${restaurantUrl}/restaurants/daily/${id}/${lang}`);
@@ -56,6 +60,7 @@ const getDailyMenu = async (id, lang) => {
   }
 }
 
+//Get weekly menu
 const getWeeklyMenu = async (id, lang) => {
   try {
     weeklyMenu = await fetchData(`${restaurantUrl}/restaurants/weekly/${id}/${lang}`)
@@ -64,8 +69,8 @@ const getWeeklyMenu = async (id, lang) => {
   }
 }
 
-// API calls for the user
-const postUserCredentials = async (credentials) => {
+// Login the user
+const loginUser = async (credentials) => {
   try {
     const user = await postData(baseUrl + '/auth/login', credentials);
     loginModal.close();
@@ -73,23 +78,23 @@ const postUserCredentials = async (credentials) => {
     currentUser = user.user;
     localStorage.setItem('token', user.token);
     await tokenTest(user.token)
-    updateMenu();
-    await getFavoritesByUserId()
-    createContainerBoxes();
-    console.log(favorites)
+    updateHeaderElements();
+    createContainerBoxes(restaurants);
   } catch (error) {
     console.error(error);
   }
 }
 
-const registerUser = async (registerData) => {
+//POST user
+const registerUser = async (userData) => {
   try {
-    await postFormData(baseUrl + '/users', registerData);
+    await postFormData(baseUrl + '/users', userData);
   } catch (error) {
     console.log(error);
   }
 }
 
+//Modify user information
 const putUser = async (userData) => {
   try {
     await putData(`${baseUrl}/users/${currentUser.user_id}`, userData, userToken);
@@ -97,6 +102,8 @@ const putUser = async (userData) => {
     console.log(error);
   }
 }
+
+//Delete user
 const deleteUser = async () => {
   try {
     await deleteData(`${baseUrl}/users/${currentUser.user_id}`, userToken);
@@ -109,6 +116,7 @@ const deleteUser = async () => {
   }
 }
 
+//Method to test the token
 const tokenTest = async (token) => {
   try {
     await authMe(baseUrl + '/auth/me', token)
@@ -117,8 +125,7 @@ const tokenTest = async (token) => {
   }
 }
 
-
-//API calls for the favorites
+//Save restaurant companyId to db
 const saveToFavorites = async (companyId) => {
   try {
     const data = {company_id: companyId};
@@ -128,16 +135,16 @@ const saveToFavorites = async (companyId) => {
   }
 }
 
+//Delete restaurant compnayId in db
 const removeFromFavorites = async (companyId) => {
   try {
-    console.log("User:", userToken);
-    console.log("Company:", companyId);
     await deleteData(`${baseUrl}/favorites/${companyId}`, userToken);
   } catch (error) {
     console.log(error);
   }
 }
 
+// Get current user favorites from db
 const getFavoritesByUserId = async () => {
   try {
     favorites = await getData(`${baseUrl}/favorites/${currentUser.user_id}`, userToken)
@@ -146,6 +153,7 @@ const getFavoritesByUserId = async () => {
   }
 }
 
+//Get user current location
 const getUserLocation = () => {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -155,10 +163,12 @@ const getUserLocation = () => {
   });
 }
 
+//Calculate distance between User and restaurants
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return Math.sqrt(((lat2 - lat1) ** 2) + ((lon2 - lon1) ** 2));
 }
 
+//Finds the nearest restaurant to user
 const findNearestRestaurant = async (restaurants) => {
   const user = await getUserLocation();
   userMarker(user);
@@ -175,6 +185,7 @@ const findNearestRestaurant = async (restaurants) => {
       closestRestaurant = rest;
     }
   }
+  //zoom effect to the nearest restaurant and show its daily/weekly menu
   zoomRestaurant(closestRestaurant);
   const menu = await getDailyMenu(closestRestaurant._id, 'en');
   menuDisplay.innerHTML = menuTable(menu);
@@ -182,57 +193,62 @@ const findNearestRestaurant = async (restaurants) => {
 
 };
 
-const signUpPage = () => {
+//Modal for user registering
+const registerPage = () => {
   const registerBtn = document.querySelector('#registerBtn');
   registerBtn.addEventListener('click', function () {
-    signUpModal.innerHTML = signUpScreen();
-    signUpModal.showModal();
+    registerModal.innerHTML = registerScreen();
+    registerModal.showModal();
 
-    const closeBtn = document.querySelector('.close-btn')
+    const closeBtn = registerModal.querySelector('.close-btn');
     closeBtn.addEventListener('click', function () {
-      signUpModal.close();
-    })
+      registerModal.close();
+    });
 
-    requestAnimationFrame(() => {
-      const signUpForm = document.querySelector('#signUpForm');
-      signUpForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const formData = new FormData(signUpForm);
-        console.log(formData)
-        await registerUser(formData);
 
-        const username = formData.get('username');
-        const password = formData.get('password');
+    const registerForm = document.querySelector('#signUpForm');
+    registerForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      //Get formData from the form inputs
+      const formData = new FormData(registerForm);
+      await registerUser(formData);
 
-        if (username && password) {
-          const credentials = {username, password};
-          await postUserCredentials(credentials);
-        }
-      });
+      //Automatically login user after registering
+      const username = formData.get('username');
+      const password = formData.get('password');
+
+      if (username && password) {
+        const credentials = {username, password};
+        await loginUser(credentials);
+      }
+
     });
   });
 };
 
-
-const updateMenu = () => {
+// Update header after successful login
+const updateHeaderElements = () => {
   if (currentUser) {
-    console.log(currentUser.profile_picture)
-    console.log(`${uploadsUrl}${currentUser.profile_picture}_thumb.png`);
+
+    //Add new elements to the header and get profile picture
     headersUl.innerHTML = `
     <img class="profile-pic" src="${uploadsUrl}${currentUser.profile_picture}_thumb.png" alt="profile-pic">
     <li id="userMenuBtn">User Menu</li>
     <li id="logoutBtn">Logout</li>
     `;
+
+    //Modal for checking and modifying user information
     document.querySelector('#userMenuBtn').addEventListener('click', () => {
-      userMenuModal.innerHTML = userMenuScreen(currentUser);
-      userMenuModal.showModal();
-      userMenuPage();
+      profileModal.innerHTML = userMenuScreen(currentUser);
+      profileModal.showModal();
+      profilePage();
       const closeBtn = document.querySelector('.close-btn')
       closeBtn.addEventListener('click', function (e) {
-        userMenuModal.close();
+        profileModal.close();
       })
-
     });
+
+    //Create logout modal
     document.querySelector('#logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('token');
       userToken = null;
@@ -243,14 +259,13 @@ const updateMenu = () => {
 }
 
 
-const userMenuPage = () => {
+const profilePage = () => {
   if (currentUser) {
     const userMenuForm = document.querySelector('#userMenuForm');
     userMenuForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const clickedButton = e.submitter;
       const action = clickedButton.value;
-      console.log(action);
       if (action === 'update') {
         const formData = new FormData(userMenuForm);
         const userData = {};
@@ -272,16 +287,22 @@ const userMenuPage = () => {
   }
 };
 
+
 const loginPage = () => {
   const loginBtn = document.querySelector('#loginBtn');
+  //Login modal gets created
   loginBtn.addEventListener('click', function () {
-    loginModal.innerHTML = loginScreen();
+    loginModal.innerHTML = createLoginModal();
     loginModal.showModal();
+
     const closeBtn = document.querySelector('.close-btn')
     closeBtn.addEventListener('click', function (e) {
       loginModal.close();
     })
+
     const loginForm = document.querySelector('#loginForm');
+
+    //Gets data from the login modal form and post user credentials
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const username = loginForm.username.value;
@@ -290,52 +311,125 @@ const loginPage = () => {
         username: username,
         password: password
       };
-      postUserCredentials(credentials);
+      loginUser(credentials);
     });
   });
 }
 
+const getOnlyFavoriteRestaurants = () => {
+  favButton.addEventListener('click', async function () {
+      console.log('button pressed')
+      if (!currentUser) {
+        showNotification(favButton, "You need to be logged in to view your favorites!")
+        return;
+      }
+      favButton.classList.toggle('highlight');
+      if (favButton.classList.contains('highlight')) {
 
-const createContainerBoxes = async (restaurantList) => {
-  div.innerHTML = '';
-  console.log('pyöriii')
-  findNearestRestaurant(restaurants)
-  if (!restaurantList) {
-    restaurantList = restaurants;
+        if (!Array.isArray(favorites)) return;
+        const favoriteRestaurants = restaurants.filter(restaurant =>
+          favorites.some(fav => Number(fav.company_id) === restaurant.companyId)
+        );
+        await createContainerBoxes(favoriteRestaurants);
+
+      } else {
+        createContainerBoxes(restaurants)
+      }
+
+    },
+  );
+};
+
+const getSearchValue = () => {
+  searchForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const searchValue = searchForm.searchvalue.value.trim().toLowerCase();
+
+    const filteredRestaurants = restaurants.filter(restaurant =>
+      restaurant.name.toLowerCase().includes(searchValue)
+    );
+    createContainerBoxes(filteredRestaurants);
+  });
+}
+
+const clearFilters = () => {
+  clearButton.addEventListener('click', function (e) {
+    createContainerBoxes(restaurants)
+  })
+}
+
+// Gets menus and check if they are empty
+const checkIfMenuEmpty = async (restaurant) => {
+  const menu = await getDailyMenu(restaurant._id, 'en');
+  if (!menu || !menu.courses || menu.courses.length === 0) {
+    return null;
+  } else {
+    return menu;
   }
-  for (const restaurant of restaurantList) {
+}
+
+//Creates the restaurant boxes and adds important Event Listeners
+const createContainerBoxes = async (restaurants) => {
+  div.innerHTML = '';
+
+  //Loop all the  restaurants
+  for (const restaurant of restaurants) {
     try {
-      box = restaurantBox(restaurant);
+      if (currentUser) {
+        await getFavoritesByUserId()
+      }
+
+      //get menu and check if its empty
+      const menu = await checkIfMenuEmpty(restaurant)
+      if (!menu) continue;
+
+      //creates restaurant boxes
+      box = createRestaurantBox(restaurant);
       div.append(box);
-      const menu = await getDailyMenu(restaurant._id, 'en');
+
+      //Adds the daily menu to the boxes
       const menuHtml = restaurantMenu(menu);
       box.innerHTML += menuHtml;
+
+      //Favorite  button  to  add/remove from favorites
       const heartBtn = box.querySelector('.heart-icon')
+
+      // Check if the user has marked the restaurant as a favorite and add the style class if true.
       if (Array.isArray(favorites) && favorites.some(fav => Number(fav.company_id) === restaurant.companyId)) {
         heartBtn.classList.add('favorite');
       }
+
+      //Restaurant box Event listener
       box.addEventListener('click', async function () {
         try {
           const menu = await getDailyMenu(restaurant._id, 'en');
+          //Opens the menu table
           menuDisplay.innerHTML = menuTable(menu);
+          //Zoom to the clicked restaurant
           zoomRestaurant(restaurant);
+          //Gets the restaurant weekly menu
           showWeeklyMenu(restaurant)
         } catch (error) {
           console.log(error);
         }
       });
+
+      //Event listener for the Favorite Button
       heartBtn.addEventListener('click', async function (e) {
         e.preventDefault();
+        //stopPropagation prevents opening the menu table when click heart button
         e.stopPropagation();
+        //If  user not login gets a notification
         if (!currentUser) {
           showNotification(heartBtn, "You need to log in to save favorites!");
           return;
         }
 
         const companyId = restaurant.companyId
+
+        // If the element does not contain the 'favorite' class, add it; otherwise, remove it.
         if (!heartBtn.classList.contains('favorite')) {
           await saveToFavorites(companyId);
-          favoriteMarker(restaurant)
           heartBtn.classList.add('favorite');
         } else {
           await removeFromFavorites(companyId);
@@ -348,43 +442,22 @@ const createContainerBoxes = async (restaurantList) => {
   }
 };
 
-
-searchform.addEventListener('submit', function (e) {
-  e.preventDefault();
-  const searchValue = searchform.searchvalue.value.trim().toLowerCase();
-
-
-  const filteredRestaurants = restaurants.filter(restaurant =>
-    restaurant.name.toLowerCase().includes(searchValue)
-  );
-  console.log(searchValue);
-  createContainerBoxes(filteredRestaurants);
-});
-
-const favButton = document.querySelector('#fav-button');
-
-favButton.addEventListener('click', function () {
-  if (!Array.isArray(favorites)) return;
-
-  const favoriteRestaurants = restaurants.filter(restaurant =>
-    favorites.some(fav => Number(fav.company_id) === restaurant.companyId)
-  );
-
-  createContainerBoxes(favoriteRestaurants);
-});
-
-
+// Displays the weekly menu based on the day button clicked
 const showWeeklyMenu = (restaurant) => {
+  // Select all day buttons using the data-day attribute
   const dayButtons = document.querySelectorAll('button[data-day]');
   dayButtons.forEach(button => {
+    // Replace the old button with a cloned one to remove previous event listeners
     const newButton = button.cloneNode(true);
     button.replaceWith(newButton);
     newButton.addEventListener('click', async (e) => {
       e.preventDefault();
+      // Get the index of the selected day (for example Monday = 0)
       const day = e.target.dataset.day;
       try {
         weeklyMenu = [];
         await getWeeklyMenu(restaurant._id, 'en');
+        // Retrieve the menu for the selected day based on the index
         const selectedDayMenu = weeklyMenu.days[day];
         menuDisplay.innerHTML = menuTable(selectedDayMenu);
       } catch (error) {
@@ -395,6 +468,8 @@ const showWeeklyMenu = (restaurant) => {
   });
 };
 
+
+//Shows user notifications
 const showNotification = (targetElement, message, timeout = 3000) => {
   const notification = document.getElementById('notification');
   notification.textContent = message;
@@ -413,13 +488,17 @@ const showNotification = (targetElement, message, timeout = 3000) => {
   }, timeout);
 };
 
+//SetUp when page is loaded
 const init = async () => {
   await getRestaurants();
   await createMap();
   await getRestaurantsLatLon(restaurants);
-  createContainerBoxes();
+  findNearestRestaurant(restaurants)
+  getOnlyFavoriteRestaurants()
+  getSearchValue()
+  clearFilters()
   loginPage();
-  signUpPage();
+  registerPage();
   getUserLocation()
 }
 init();

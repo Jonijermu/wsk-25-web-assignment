@@ -15,12 +15,16 @@ const getUser = async (req, res) => {
   res.json(users);
 };
 
-const getUserById = async (req, res) => {
-  const user = await findUserById(req.params.id);
-  if (user) {
-    res.json(user);
-  } else {
-    res.sendStatus(404);
+const getUserById = async (req, res, next) => {
+  try {
+    const user = await findUserById(req.params.id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    next(error);
   }
 };
 

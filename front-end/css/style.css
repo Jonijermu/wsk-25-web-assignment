@@ -167,8 +167,15 @@ main {
   border: 1px solid #b5b5b5;
 }
 
+
 .search_bar button:hover {
   background-color: #5bb0a8;
+  transform: scale(1.1);
+  color: white;
+}
+
+.highlight {
+  background-color: #5bb0a8 !important;
   transform: scale(1.1);
   color: white;
 }
