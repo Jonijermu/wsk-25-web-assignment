@@ -71,10 +71,15 @@ const putUser = async (req, res, next) => {
     error.status = 400;
     return next(error);
   }
+
   if (res.locals.user.user_id !== Number(req.params.id)) {
     const error = new Error("Don't have access");
     error.status = 403;
     return next(error);
+  }
+
+  if (req.body.password) {
+    req.body.password = bcrypt.hashSync(req.body.password, 10);
   }
   const user = await modifyUser(req.body, req.params.id);
   if (user) {
