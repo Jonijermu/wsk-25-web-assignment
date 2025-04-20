@@ -48,7 +48,7 @@ const userMenuScreen = (currentUser) => {
       <input type="text" name="name" value="${currentUser.name}" />
       <input type="text" name="username" value="${currentUser.username}"  />
       <input type="email" name="email" value="${currentUser.email}"  />
-      <input type="password" name="password" placeholder="Password"  />
+      <input type="password" name="password" placeholder="New password" />
 
 
       <button type="submit" name="action" value="update">Change Information</button>

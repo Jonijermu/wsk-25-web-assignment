@@ -92,8 +92,11 @@ const loginUser = async (credentials) => {
 const registerUser = async (userData) => {
   try {
     await postFormData(baseUrl + '/users', userData);
+    return true;
   } catch (error) {
     console.log(error);
+    alert('Registration failed. Please try again.');
+    return false;
   }
 }
 
@@ -217,16 +220,18 @@ const registerPage = () => {
       e.preventDefault();
       //Get formData from the form inputs
       const formData = new FormData(registerForm);
-      await registerUser(formData);
+      const success = await registerUser(formData);
 
       //Automatically login user after registering
-      const username = formData.get('username');
-      const password = formData.get('password');
+      if (success) {
+        const username = formData.get('username');
+        const password = formData.get('password');
 
-      if (username && password) {
-        const credentials = {username, password};
-        await loginUser(credentials);
-        registerModal.close()
+        if (username && password) {
+          const credentials = {username, password};
+          await loginUser(credentials);
+        }
+        registerModal.close();
       }
 
     });
