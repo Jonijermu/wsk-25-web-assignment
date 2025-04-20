@@ -9,7 +9,7 @@ body {
 header {
   background-color: #8BD7D2;
   display: flex;
-  margin: 10px 10px 0 10px;
+  margin: 20px 20px 0 20px;
   justify-content: space-between;
   align-items: center;
   padding: 25px 30px;
@@ -55,7 +55,7 @@ header li:hover {
 main {
   background-color: #fafafa;
   height: auto;
-  margin: 0 10px 0 10px;
+  margin: 0 20px 0 20px;
   display: flex;
   align-items: flex-start;
   border: 1px solid black;
@@ -182,21 +182,21 @@ main {
 
 .restaurant-container {
   width: 100%;
-  height: 600px;
+  height: 400px;
   background-color: #fafafa;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   overflow-y: auto;
   overflow-x: hidden;
-  border-top:1px solid #d3d3d3;
+  border-top: 1px solid #d3d3d3;
   padding-top: 10px;
 
 }
 
 .restaurant-box {
-  width: 250px;
+  width: 300px;
   height: 200px;
   background: #ffffff;
   margin: 20px;
@@ -235,7 +235,7 @@ main {
 .heart-icon {
   width: 20px;
   height: 20px;
-  float:  right;
+  float: right;
   background: none;
   border: none;
   padding-top: 10px;
@@ -244,7 +244,7 @@ main {
   transition: transform 0.3s, opacity 0.3s;
 }
 
-.heart-icon:hover  {
+.heart-icon:hover {
   content: url('../img/heart2.png');
   transform: scale(1.1);
 }
@@ -264,8 +264,9 @@ main {
   white-space: nowrap;
   z-index: 1000;
   pointer-events: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
+
 .hidden {
   display: none;
 }
@@ -281,7 +282,7 @@ main {
 
 #map {
   width: 100%;
-  height: 800px;
+  height: 600px;
   position: relative;
 }
 
@@ -289,7 +290,7 @@ main {
 
 .menu_section {
   background-color: #fafafa;
-  margin: 0 10px 0px 10px;
+  margin: 0 20px 0 20px;
   border: 1px solid black;
   padding: 20px;
 }
@@ -362,15 +363,17 @@ main {
 .menu_section tbody td {
   padding: 12px;
   border-bottom: 1px solid #eee;
+  font-size: 18px;
 }
 
 footer {
   background-color: #8BD7D2;
   padding: 5px;
   border: #333333 1px solid;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
   text-align: center;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0 0 30px 30px;
 }
 
