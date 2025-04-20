@@ -10,7 +10,7 @@ const createLoginModal = () => {
     </div>
     <input type="text" name="username" placeholder="Username" required />
     <input type="password" name="password" placeholder="Password" required />
-    <button type="submit">Login</button>
+    <button type="submit" class="submit-btn">Login</button>
   </form>
   `;
   return loginHtml

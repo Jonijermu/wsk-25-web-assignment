@@ -72,18 +72,23 @@ const getWeeklyMenu = async (id, lang) => {
 const loginUser = async (credentials) => {
   try {
     const user = await postData(baseUrl + '/auth/login', credentials);
+    if (!user || !user.token) {
+
+      showNotification(loginModal, "Invalid username or password.");
+      return;
+    }
     userToken = user.token;
     currentUser = user.user;
     localStorage.setItem('token', user.token);
     if (currentUser) {
       loginModal.close();
     }
-    await tokenTest(user.token)
+    await tokenTest(user.token);
     updateHeaderElements();
     createContainerBoxes(restaurants);
   } catch (error) {
     console.error(error);
-
+    showNotification("Login failed. Please check your username and password.", "error");
   }
 }
 
@@ -245,7 +250,7 @@ const updateHeaderElements = () => {
       profileModal.innerHTML = userMenuScreen(currentUser);
       profileModal.showModal();
       profilePage();
-      const closeBtn = document.querySelector('.close-btn')
+      const closeBtn = profileModal.querySelector('.close-btn');
       closeBtn.addEventListener('click', function () {
         profileModal.close();
       })
