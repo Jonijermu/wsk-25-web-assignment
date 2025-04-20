@@ -44,10 +44,9 @@ const zoomRestaurant = (rest) => {
 //marker for the user
 const userMarker = (user) => {
   const marker = L.marker([user.coords.latitude, user.coords.longitude,]).addTo(map);
-  marker.bindPopup('cockSucker')
+  marker.bindPopup('you  are here')
 
 }
-
 
 export {
   createMap,
