@@ -1,4 +1,4 @@
-const fetchData  = async (url, options = {}) => {
+const fetchData = async (url, options = {}) => {
   const response = await fetch(url, options);
   const json = await response.json();
   if (!response.ok) {
@@ -89,16 +89,16 @@ const authMe = async (url, token) => {
 
 
 const deleteData = async (url, token) => {
-  const options  =  {
+  const options = {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`
     }
   }
 
-    const response = await fetch(url, options);
-    const message = await response.json();
-    console.log(message)
+  const response = await fetch(url, options);
+  const message = await response.json();
+  console.log(message)
 }
 
 

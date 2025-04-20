@@ -14,7 +14,7 @@ const findUserById = async (id) => {
 
     SELECT Users.*, Favorites.company_id
     FROM Users
-    LEFT JOIN Favorites ON Users.user_id = Favorites.user_id
+           LEFT JOIN Favorites ON Users.user_id = Favorites.user_id
     WHERE Users.user_id = ?
   `, [id]);
 
@@ -41,9 +41,9 @@ const addUser = async (user) => {
   const {name, username, email, password, profile_picture} = user;
   const sql = `
 
-  INSERT INTO Users
-  (name, username, email, password, profile_picture)
-  VALUES (?, ?, ?, ?, ?)`;
+    INSERT INTO Users
+    (name, username, email, password, profile_picture)
+    VALUES (?, ?, ?, ?, ?)`;
 
   const params = [name, username, email, password, profile_picture];
   const rows = await promisePool.query(sql, params);
@@ -60,9 +60,9 @@ const deleteUserById = async (id) => {
     await connection.beginTransaction();
     const [rows] = await connection.execute(`
 
-    DELETE
-    FROM Users
-    WHERE user_id = ?`,
+        DELETE
+        FROM Users
+        WHERE user_id = ?`,
       [id]);
     console.log('row', rows)
     if (rows.affectedRows === 0) {
@@ -82,9 +82,9 @@ const deleteUserById = async (id) => {
 const modifyUser = async (user, id) => {
   const sql = promisePool.format(`
 
-  UPDATE Users
-  SET ?
-  WHERE user_id = ?`,
+      UPDATE Users
+      SET ?
+      WHERE user_id = ?`,
     [user, id]);
 
   const rows = await promisePool.execute(sql);
@@ -98,9 +98,9 @@ const modifyUser = async (user, id) => {
 
 const login = async (user) => {
   const sql = `
-  SELECT *
-  FROM Users
-  WHERE username = ?`;
+    SELECT *
+    FROM Users
+    WHERE username = ?`;
 
   const [rows] = await promisePool.execute(sql, [user]);
   console.log('rows', rows);

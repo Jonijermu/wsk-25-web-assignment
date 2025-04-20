@@ -151,7 +151,7 @@ const removeFromFavorites = async (companyId) => {
 // Get current user favorites from db
 const getFavoritesByUserId = async () => {
   try {
-    favorites  = []
+    favorites = []
     favorites = await getData(`${baseUrl}/favorites/${currentUser.user_id}`, userToken)
   } catch (error) {
     console.log(error);
@@ -323,12 +323,12 @@ const loginPage = () => {
 
 const getOnlyFavoriteRestaurants = () => {
   favButton.addEventListener('click', async function () {
-    console.log('button pressed')
+      console.log('button pressed')
       if (!currentUser) {
         showNotification(favButton, "You need to be logged in to view your favorites!")
         return;
       }
-    await getFavoritesByUserId()
+      await getFavoritesByUserId()
 
       if (!Array.isArray(favorites)) return;
 

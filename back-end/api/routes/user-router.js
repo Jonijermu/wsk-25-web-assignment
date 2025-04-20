@@ -29,8 +29,8 @@ userRouter.route('/').get(getUser).post(
 userRouter.route('/:id').get(getUserById).delete(authenticateToken, deleteUser).put(
   upload.single('file'),
   body('email').optional().isEmail(),
-  body('username').optional().isLength({ min: 3, max: 20 }).isAlphanumeric(),
-  body('password').optional().isLength({ min: 8 }),
+  body('username').optional().isLength({min: 3, max: 20}).isAlphanumeric(),
+  body('password').optional().isLength({min: 8}),
   validationErrors,
   createThumbnail,
   authenticateToken,

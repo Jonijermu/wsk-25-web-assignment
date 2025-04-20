@@ -29,11 +29,14 @@ const getFavoriteByUserId = async (req, res, next) => {
   }
 }
 
-const postFavorite = async (req, res,  next) => {
+const postFavorite = async (req, res, next) => {
   try {
     const userId = res.locals.user.user_id;
     const result = await addFavorite(userId, req.body.company_id);
-    res.status(201).json({ message: "New Favorite Added", user_id: result.user_id });
+    res.status(201).json({
+      message: "New Favorite Added",
+      user_id: result.user_id
+    });
   } catch (error) {
     next(error);
   }
@@ -44,9 +47,12 @@ const removeFavorite = async (req, res, next) => {
   try {
     const result = await deleteFavorite(res.locals.user.user_id, req.params.id);
     if (!result) {
-      return res.status(404).json({ message: "Favorite not found or already removed" });
+      return res.status(404).json({message: "Favorite not found or already removed"});
     }
-    res.status(200).json({ message: "Favorite successfully removed", user_id: res.locals.user.user_id });
+    res.status(200).json({
+      message: "Favorite successfully removed",
+      user_id: res.locals.user.user_id
+    });
   } catch (error) {
     next(error);
   }

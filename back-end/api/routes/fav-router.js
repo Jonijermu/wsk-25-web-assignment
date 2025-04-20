@@ -9,7 +9,7 @@ import {authenticateToken} from "../../middlewares.js";
 
 const favRouter = express.Router();
 
-favRouter.route('/').get(getFavorite).post(authenticateToken,postFavorite);
+favRouter.route('/').get(getFavorite).post(authenticateToken, postFavorite);
 
 favRouter.route('/:id').delete(authenticateToken, removeFavorite).get(authenticateToken, getFavoriteByUserId);
 

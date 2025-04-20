@@ -1,4 +1,3 @@
-
 // Creates the login modal elements and return the html
 const createLoginModal = () => {
   let loginHtml = '';
