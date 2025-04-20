@@ -183,7 +183,7 @@ main {
 
 .restaurant-container {
   width: 100%;
-  height: 400px;
+  height: 350px;
   background-color: #fafafa;
   display: flex;
   flex-direction: row;
@@ -283,14 +283,13 @@ main {
 
 #map {
   width: 100%;
-  height: 600px;
+  height: 500px;
   position: relative;
 }
 
 /*Weekly menu section  */
 
 .menu_section {
-  width: 100%;
   background-color: #fafafa;
   margin: 0 20px 0 20px;
   border: 1px solid black;
