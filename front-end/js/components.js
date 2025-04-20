@@ -28,7 +28,8 @@ const registerScreen = () => {
       <input type="text" name="username" placeholder="Username" required />
       <input type="email" name="email" placeholder="email" required />
       <input type="password" name="password" placeholder="Password" required />
-      <input type="file" name="file" required/>
+      <label for="file">Your profile picture here</label>
+      <input type="file" name="file" accept="image/*" required />
       <button type="submit">Register</button>
     </form>
 `;

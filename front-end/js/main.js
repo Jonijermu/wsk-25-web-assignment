@@ -323,7 +323,6 @@ const loginPage = () => {
 
 const getOnlyFavoriteRestaurants = () => {
   favButton.addEventListener('click', async function () {
-      console.log('button pressed')
       if (!currentUser) {
         showNotification(favButton, "You need to be logged in to view your favorites!")
         return;
