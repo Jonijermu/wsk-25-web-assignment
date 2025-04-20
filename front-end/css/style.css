@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Roboto", "sans-serif";
+  font-family: "Times New Roman", serif;
   font-weight: 400;
   background-color: #ffffff;
   font-style: normal;
@@ -197,7 +197,7 @@ main {
 
 .restaurant-box {
   width: 250px;
-  height: 300px;
+  height: 200px;
   background: #ffffff;
   margin: 20px;
   box-sizing: border-box;
@@ -289,9 +289,8 @@ main {
 
 .menu_section {
   background-color: #fafafa;
-  margin: 0 10px 10px 10px;
+  margin: 0 10px 0px 10px;
   border: 1px solid black;
-  border-radius: 0 0 30px 30px;
   padding: 20px;
 }
 
@@ -315,6 +314,13 @@ main {
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.current-day {
+  background-color: #5bb0a8 !important;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #333;
 }
 
 .menu_section .day-buttons button:hover {
@@ -357,3 +363,14 @@ main {
   padding: 12px;
   border-bottom: 1px solid #eee;
 }
+
+footer {
+  background-color: #8BD7D2;
+  padding: 5px;
+  border: #333333 1px solid;
+  margin-right: 10px;
+  margin-left: 10px;
+  text-align: center;
+  border-radius: 0px 0px 10px 10px;
+}
+

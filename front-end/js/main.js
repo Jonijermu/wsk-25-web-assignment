@@ -11,7 +11,6 @@ import {
 import {
   createLoginModal, createRestaurantBox,
   menuTable, registerScreen,
-  restaurantMenu,
   userMenuScreen
 } from "./components.js";
 
@@ -73,15 +72,18 @@ const getWeeklyMenu = async (id, lang) => {
 const loginUser = async (credentials) => {
   try {
     const user = await postData(baseUrl + '/auth/login', credentials);
-    loginModal.close();
     userToken = user.token;
     currentUser = user.user;
     localStorage.setItem('token', user.token);
+    if (currentUser) {
+      loginModal.close();
+    }
     await tokenTest(user.token)
     updateHeaderElements();
     createContainerBoxes(restaurants);
   } catch (error) {
     console.error(error);
+
   }
 }
 
@@ -220,6 +222,7 @@ const registerPage = () => {
       if (username && password) {
         const credentials = {username, password};
         await loginUser(credentials);
+        registerModal.close()
       }
 
     });
@@ -243,7 +246,7 @@ const updateHeaderElements = () => {
       profileModal.showModal();
       profilePage();
       const closeBtn = document.querySelector('.close-btn')
-      closeBtn.addEventListener('click', function (e) {
+      closeBtn.addEventListener('click', function () {
         profileModal.close();
       })
     });
@@ -296,7 +299,7 @@ const loginPage = () => {
     loginModal.showModal();
 
     const closeBtn = document.querySelector('.close-btn')
-    closeBtn.addEventListener('click', function (e) {
+    closeBtn.addEventListener('click', function () {
       loginModal.close();
     })
 
@@ -318,7 +321,6 @@ const loginPage = () => {
 
 const getOnlyFavoriteRestaurants = () => {
   favButton.addEventListener('click', async function () {
-      console.log('button pressed')
       if (!currentUser) {
         showNotification(favButton, "You need to be logged in to view your favorites!")
         return;
@@ -353,20 +355,11 @@ const getSearchValue = () => {
 }
 
 const clearFilters = () => {
-  clearButton.addEventListener('click', function (e) {
+  clearButton.addEventListener('click', function () {
     createContainerBoxes(restaurants)
   })
 }
 
-// Gets menus and check if they are empty
-const checkIfMenuEmpty = async (restaurant) => {
-  const menu = await getDailyMenu(restaurant._id, 'en');
-  if (!menu || !menu.courses || menu.courses.length === 0) {
-    return null;
-  } else {
-    return menu;
-  }
-}
 
 //Creates the restaurant boxes and adds important Event Listeners
 const createContainerBoxes = async (restaurants) => {
@@ -379,17 +372,9 @@ const createContainerBoxes = async (restaurants) => {
         await getFavoritesByUserId()
       }
 
-      //get menu and check if its empty
-      const menu = await checkIfMenuEmpty(restaurant)
-      if (!menu) continue;
-
       //creates restaurant boxes
       box = createRestaurantBox(restaurant);
       div.append(box);
-
-      //Adds the daily menu to the boxes
-      const menuHtml = restaurantMenu(menu);
-      box.innerHTML += menuHtml;
 
       //Favorite  button  to  add/remove from favorites
       const heartBtn = box.querySelector('.heart-icon')
@@ -446,12 +431,23 @@ const createContainerBoxes = async (restaurants) => {
 const showWeeklyMenu = (restaurant) => {
   // Select all day buttons using the data-day attribute
   const dayButtons = document.querySelectorAll('button[data-day]');
+  //Get current day
+  const currentDay = (new Date().getDay() + 6) % 7;
+
   dayButtons.forEach(button => {
+    const dayIndex = parseInt(button.dataset.day, 10);
+    // Highlight the button for the current day
+    if (dayIndex === currentDay) {
+      button.classList.add('current-day');
+    }
     // Replace the old button with a cloned one to remove previous event listeners
     const newButton = button.cloneNode(true);
     button.replaceWith(newButton);
     newButton.addEventListener('click', async (e) => {
       e.preventDefault();
+      const updatedButtons = document.querySelectorAll('button[data-day]');
+      updatedButtons.forEach(btn => btn.classList.remove('current-day'));
+      newButton.classList.add('current-day');
       // Get the index of the selected day (for example Monday = 0)
       const day = e.target.dataset.day;
       try {

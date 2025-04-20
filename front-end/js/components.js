@@ -70,7 +70,7 @@ const createRestaurantBox = (restaurant) => {
     <p>${city}</p>
     <p>${address}</p>
     <p>${phone}</p>
-    <h3>Menu</h3>
+
   `;
   return div;
 }
@@ -95,6 +95,14 @@ const restaurantMenu = (menu) => {
 //Creates menu table for weekly view
 const menuTable = (menu) => {
   const {courses} = menu;
+
+  // Check if the courses array is empty
+  if (!courses || courses.length === 0) {
+    return `
+      <p>No menu available for this day.</p>
+    `;
+  }
+
   let menuHtml = '';
 
   courses.forEach(course => {
