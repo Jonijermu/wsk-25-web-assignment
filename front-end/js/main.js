@@ -43,6 +43,7 @@ const clearButton = document.querySelector('#clear-button')
 const getRestaurants = async () => {
   try {
     restaurants = await fetchData(restaurantUrl + '/restaurants')
+    restaurants.sort((a, b) => a.name.localeCompare(b.name));
     //Creates restaurant container boxes
     createContainerBoxes(restaurants)
   } catch (error) {

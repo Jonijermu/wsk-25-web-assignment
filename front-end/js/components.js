@@ -66,10 +66,10 @@ const createRestaurantBox = (restaurant) => {
   div.innerHTML = `
     <img src="./img/heart.png" alt="heart" class="heart-icon">
     <h3>${name}</h3>
-    <p>${company}</p>
-    <p>${city}</p>
-    <p>${address}</p>
-    <p>${phone}</p>
+    <p>Company ${company}</p>
+    <p>City ${city}</p>
+    <p>Address ${address}</p>
+    <p>Phone ${phone}</p>
 
   `;
   return div;
