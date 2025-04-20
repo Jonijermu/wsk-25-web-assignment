@@ -72,11 +72,6 @@ const getWeeklyMenu = async (id, lang) => {
 const loginUser = async (credentials) => {
   try {
     const user = await postData(baseUrl + '/auth/login', credentials);
-    if (!user || !user.token) {
-
-      showNotification(loginModal, "Invalid username or password.");
-      return;
-    }
     userToken = user.token;
     currentUser = user.user;
     localStorage.setItem('token', user.token);
@@ -88,7 +83,7 @@ const loginUser = async (credentials) => {
     createContainerBoxes(restaurants);
   } catch (error) {
     console.error(error);
-    showNotification("Login failed. Please check your username and password.", "error");
+    alert("Invalid username or password.");
   }
 }
 
@@ -105,8 +100,10 @@ const registerUser = async (userData) => {
 const putUser = async (userData) => {
   try {
     await putData(`${baseUrl}/users/${currentUser.user_id}`, userData, userToken);
+    alert('user  updated  successfully')
   } catch (error) {
     console.log(error);
+    alert('User update failed')
   }
 }
 
@@ -154,6 +151,7 @@ const removeFromFavorites = async (companyId) => {
 // Get current user favorites from db
 const getFavoritesByUserId = async () => {
   try {
+    favorites  = []
     favorites = await getData(`${baseUrl}/favorites/${currentUser.user_id}`, userToken)
   } catch (error) {
     console.log(error);
@@ -283,7 +281,6 @@ const profilePage = () => {
           }
         });
         const fileInput = userMenuForm.querySelector('input[type="file"]');
-        console.log(fileInput)
         if (Object.keys(userData).length > 0) {
           putUser(userData);
         }
@@ -326,26 +323,23 @@ const loginPage = () => {
 
 const getOnlyFavoriteRestaurants = () => {
   favButton.addEventListener('click', async function () {
+    console.log('button pressed')
       if (!currentUser) {
         showNotification(favButton, "You need to be logged in to view your favorites!")
         return;
       }
-      favButton.classList.toggle('highlight');
-      if (favButton.classList.contains('highlight')) {
+    await getFavoritesByUserId()
 
-        if (!Array.isArray(favorites)) return;
-        const favoriteRestaurants = restaurants.filter(restaurant =>
-          favorites.some(fav => Number(fav.company_id) === restaurant.companyId)
-        );
-        await createContainerBoxes(favoriteRestaurants);
+      if (!Array.isArray(favorites)) return;
 
-      } else {
-        createContainerBoxes(restaurants)
-      }
-
+      const favoriteRestaurants = restaurants.filter(restaurant =>
+        favorites.some(fav => Number(fav.company_id) === restaurant.companyId)
+      );
+      await createContainerBoxes(favoriteRestaurants);
     },
   );
 };
+
 
 const getSearchValue = () => {
   searchForm.addEventListener('submit', function (e) {
@@ -358,6 +352,7 @@ const getSearchValue = () => {
     createContainerBoxes(filteredRestaurants);
   });
 }
+
 
 const clearFilters = () => {
   clearButton.addEventListener('click', function () {
